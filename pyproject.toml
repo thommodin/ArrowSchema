@@ -1,13 +1,16 @@
 [project]
 name = "arrowschema"
 version = "0.1.0"
-description = "Add your description here"
+description = "Interface module to handle pyarrow schemas in a not so annoying way."
 readme = "README.md"
 authors = [
     { name = "thommodin", email = "thomas.galindo@utas.edu.au" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pyarrow>=22.0.0",
+    "pydantic>=2.12.4",
+]
 
 [project.scripts]
 arrowschema = "arrowschema:main"
