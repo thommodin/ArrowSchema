@@ -59,7 +59,7 @@ def _test_unit_type(
         )
         type_ = match.group(1)
         unit = match.group(2)
-        tz = "z" if type_ == "timestamp" else None
+        tz = "Z" if type_ == "timestamp" else None
 
         pyarrow_type = arrowschema.model.PyarrowType(
             type=type_,
@@ -198,9 +198,9 @@ def test_timestamp_type():
     _test_unit_type(
         literal=arrowschema.literal.pyarrow_timestamp,
         pyarrow_types=[
-            pyarrow.timestamp("s", tz="z"),
-            pyarrow.timestamp("ms", tz="z"),
-            pyarrow.timestamp("ns", tz="z"),
-            pyarrow.timestamp("us", tz="z"),
+            pyarrow.timestamp("s", tz="Z"),
+            pyarrow.timestamp("ms", tz="+0000"),
+            pyarrow.timestamp("ns", tz="+10:30"),
+            pyarrow.timestamp("us", tz="-07:00"),
         ],
     )

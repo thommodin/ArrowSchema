@@ -32,7 +32,7 @@ class PyarrowType(pydantic.BaseModel):
     )
     tz: str | None = pydantic.Field(
         default=None,
-        pattern=r"^([\+\-]\d{1,2}:\d{2}|[Zz])",
+        pattern=r"^([\+\-]\d{2}:\d{2}|[\+\-]\d{2}\d{2}|[\+\-]\d{2}|Z)$",
         description="The timezone. Applies to some time related types",
     )
 
@@ -76,7 +76,7 @@ class PyarrowType(pydantic.BaseModel):
             # Unit
             r"(?:\[(day|s|ms|ns|us)"
             # TZ
-            r"(?:,\s*tz=([\+\-]\d{1,2}:\d{2}|[Zz]))?\])?"
+            r"(?:,\s*tz=([\+\-]\d{2}:\d{2}|[\+\-]\d{2}\d{2}|[\+\-]\d{2}|Z))?\])?"
         )
         match = re.match(pattern, str(native_pyarrow_type))
         type_ = match.group(1)
