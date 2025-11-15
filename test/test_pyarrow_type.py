@@ -1,4 +1,4 @@
-import arrowschema.model
+import arrowschema
 import arrowschema.literal
 import pyarrow
 import re
@@ -13,7 +13,7 @@ def _test_simple_type(
     pyarrow_literals = list(typing.get_args(literal))
 
     for pyarrow_literal in pyarrow_literals:
-        pyarrow_type = arrowschema.model.PyarrowType(
+        pyarrow_type = arrowschema.PyarrowType(
             type=pyarrow_literal,
         )
         pyarrow_type.native
@@ -23,7 +23,7 @@ def _test_simple_type(
 
     # Hydrate and test all native pyarrow types to type
     for pyarrow_type_ in pyarrow_types:
-        pyarrow_type = arrowschema.model.PyarrowType.from_pyarrow(pyarrow_type_)
+        pyarrow_type = arrowschema.PyarrowType.from_native(pyarrow_type_)
         assert pyarrow_type_.equals(pyarrow_type.native)
 
 
@@ -61,7 +61,7 @@ def _test_unit_type(
         unit = match.group(2)
         tz = "Z" if type_ == "timestamp" else None
 
-        pyarrow_type = arrowschema.model.PyarrowType(
+        pyarrow_type = arrowschema.PyarrowType(
             type=type_,
             unit=unit,
             tz=tz,
@@ -78,7 +78,7 @@ def _test_unit_type(
 
     # Hydrate and test all native pyarrow types to type
     for pyarrow_type_ in pyarrow_types:
-        pyarrow_type = arrowschema.model.PyarrowType.from_pyarrow(pyarrow_type_)
+        pyarrow_type = arrowschema.PyarrowType.from_native(pyarrow_type_)
         assert pyarrow_type_.equals(pyarrow_type.native)
 
 

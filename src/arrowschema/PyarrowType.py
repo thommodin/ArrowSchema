@@ -1,3 +1,4 @@
+import arrowschema.PyarrowBinder
 import arrowschema.literal
 import pyarrow
 import pydantic
@@ -6,7 +7,7 @@ import typing
 import warnings
 
 
-class PyarrowType(pydantic.BaseModel):
+class PyarrowType(arrowschema.PyarrowBinder.PyarrowBinder):
     """
     Validate and hydrate pyarrow types
 
@@ -63,7 +64,7 @@ class PyarrowType(pydantic.BaseModel):
             return pyarrow.type_for_alias(self.alias)
 
     @classmethod
-    def from_pyarrow(cls, native_pyarrow_type) -> typing.Self:
+    def from_native(cls, native_pyarrow_type) -> typing.Self:
         """
         Convert from a native pyarrow type instantiation to a PyarrowType
 
@@ -199,23 +200,3 @@ class PyarrowType(pydantic.BaseModel):
                 )
 
         return self
-
-
-class PyarrowField(pydantic.BaseModel):
-    """
-    Validate and hydrate pyarrow fields
-    """
-
-    name: str
-    metadata: dict
-    pass
-
-
-class PyarrowSchema(pydantic.BaseModel):
-    """
-    Validate and hydrate pyarrow schemas
-    """
-
-    fields: list[PyarrowField]
-    metadata: dict
-    pass
