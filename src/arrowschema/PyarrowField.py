@@ -17,9 +17,19 @@ class PyarrowField(arrowschema.PyarrowBinder.PyarrowBinder):
 
     @classmethod
     def from_native(cls, native_pyarrow_field) -> typing.Self:
+        # Decode metadata if exists
+        metadata = (
+            {
+                key.decode(): value.decode()
+                for key, value in native_pyarrow_field.metadata.items()
+            }
+            if isinstance(native_pyarrow_field.metadata, dict)
+            else None
+        )
+
         return cls(
             name=native_pyarrow_field.name,
-            metadata=native_pyarrow_field.metadata,
+            metadata=metadata,
             nullable=native_pyarrow_field.nullable,
             type=arrowschema.PyarrowType.from_native(native_pyarrow_field.type),
         )

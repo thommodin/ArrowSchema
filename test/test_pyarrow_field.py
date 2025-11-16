@@ -6,7 +6,10 @@ import pydantic
 name = "test"
 type_ = pyarrow.null()
 nullable = True
-metadata = {}
+metadata = {
+    "standard_name": "air_density",
+    "units": "kg m-3",
+}
 
 
 def test_native():
