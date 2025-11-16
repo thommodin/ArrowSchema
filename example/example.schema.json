@@ -1,0 +1,15 @@
+{
+    "fields": [
+        {
+            "name": "count",
+            "type": "int64",
+            "nullable": false,
+            "metadata": {
+                "description": "The count."
+            }
+        }
+    ],
+    "metadata": {
+        "Description": "This is an example arrow schema. The arrow schema metadata should describe the table."
+    }
+}

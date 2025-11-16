@@ -5,18 +5,23 @@ import pydantic
 import typing
 
 
-class PyarrowField(arrowschema.PyarrowBinder.PyarrowBinder):
+class PyarrowField(arrowschema.PyarrowType, arrowschema.PyarrowBinder.PyarrowBinder):
     """
     Validate and hydrate pyarrow fields
     """
 
     name: str
-    type: arrowschema.PyarrowType
+    # type: arrowschema.PyarrowType
     metadata: dict | None = pydantic.Field(default=None)
     nullable: bool = pydantic.Field(default=False)
 
     @classmethod
     def from_native(cls, native_pyarrow_field) -> typing.Self:
+        # Extract type
+        pyarrow_type = arrowschema.PyarrowType.from_native(
+            native_pyarrow_field.type,
+        )
+
         # Decode metadata if exists
         metadata = (
             {
@@ -31,14 +36,22 @@ class PyarrowField(arrowschema.PyarrowBinder.PyarrowBinder):
             name=native_pyarrow_field.name,
             metadata=metadata,
             nullable=native_pyarrow_field.nullable,
-            type=arrowschema.PyarrowType.from_native(native_pyarrow_field.type),
+            type=pyarrow_type.type,
+            unit=pyarrow_type.unit,
+            tz=pyarrow_type.tz,
         )
 
     @property
     def native(self) -> pyarrow.Field:
+        pyarrow_type = arrowschema.PyarrowType(
+            type=self.type,
+            unit=self.unit,
+            tz=self.tz,
+        )
+
         return pyarrow.field(
             self.name,
-            type=self.type.native,
+            type=pyarrow_type.native,
             metadata=self.metadata,
             nullable=self.nullable,
         )
@@ -48,7 +61,7 @@ class PyarrowField(arrowschema.PyarrowBinder.PyarrowBinder):
         """
         Pyarrow does not allow null type fields to not be nullable
         """
-        if self.type.type == "null" and not self.nullable:
+        if self.type == "null" and not self.nullable:
             raise ValueError("null type fields must have nullable set to true")
 
         return self

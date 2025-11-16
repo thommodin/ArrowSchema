@@ -4,7 +4,7 @@ import pytest
 import pydantic
 
 name = "test"
-type_ = pyarrow.null()
+type_ = "null"
 nullable = True
 metadata = {
     "standard_name": "air_density",
@@ -15,7 +15,7 @@ metadata = {
 def test_native():
     assert arrowschema.PyarrowField(
         name=name,
-        type=arrowschema.PyarrowType.from_native(type_),
+        type=type_,
         nullable=nullable,
         metadata=metadata,
     ).native.equals(
@@ -38,7 +38,7 @@ def test_from_native():
         ),
     ) == arrowschema.PyarrowField(
         name=name,
-        type=arrowschema.PyarrowType.from_native(type_),
+        type=type_,
         nullable=nullable,
         metadata=metadata,
     )
